@@ -6,28 +6,29 @@ from api.helpers import get_config
 
 
 parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 parser.add_argument(
     "run_dir",
     type=str,
-    help="artifact storage directory",
+    help="Artifact storage directory",
 )
 parser.add_argument(
     "--ckpt_name",
     type=str,
     default=None,
-    help="checkpoint name",
+    help="Checkpoint name",
 )
 parser.add_argument(
     "--host",
     type=str,
     default="127.0.0.1",
-    help="host address",
+    help="Host address",
 )
 parser.add_argument(
     "--port",
     type=int,
     default=5000,
-    help="host port",
+    help="Host port",
 )
 parser.add_argument(
     "--reload",

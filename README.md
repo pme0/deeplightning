@@ -76,7 +76,7 @@ For example, `python -m api.serve wandb/run-20230224_215446-6raddysk`.
 
 Then use the API as follows
 ```bash
-curl -X 'POST' 'http://127.0.0.1:5000/predict/' -F 'file=@<path-to-image>'
+python -m api.predict <file-path>
 ```
 
 ## Configure
