@@ -1,3 +1,4 @@
+import os
 import time
 
 from lightning import Trainer
@@ -10,6 +11,8 @@ from lightning.pytorch.callbacks import (
     RichProgressBar,
 )
 from lightning.pytorch.loggers import WandbLogger
+from lightning.pytorch.utilities import rank_zero
+from lightning.pytorch.utilities.rank_zero import rank_zero_only
 
 from deeplightning.core.dlconfig import DeepLightningConfig
 from deeplightning.utils.logger.helpers import add_logger_params_to_config
@@ -21,16 +24,16 @@ class DeepLightningTrainer(Trainer):
     def __init__(self, cfg: DeepLightningConfig, args: dict) -> None:
         """ Deep Lightning Trainer."""
 
-        self._passback_cfg, logger = self.init_logger(cfg)
-        callbacks = self.init_callbacks(cfg, logger.artifact_path)
+        #if os.environ.get("RANK", "0") == "0":
+        #    self._passback_cfg, logger = self.init_logger(cfg)
+        #    callbacks = self.init_callbacks(cfg, logger.artifact_path)
         super().__init__(**{
             **args, 
-            "logger": logger, 
-            "callbacks": callbacks,
+            #"logger": logger, 
+            #"callbacks": callbacks,
             "deterministic": cfg.engine.seed is not None,
         })
         
-
     def init_logger(self, cfg: DeepLightningConfig) -> None:
         """ Initialize logger."""
 
@@ -46,6 +49,7 @@ class DeepLightningTrainer(Trainer):
             # expected string; this timeout loop attempts to fix this issue
             timeout = 0
             while not isinstance(logger.experiment.dir, str):
+                print(logger.experiment.dir, type(logger.experiment.dir))
                 if timeout > 5:
                     print(
                         "\n`logger.experiment.dir` is function instead of "
@@ -103,7 +107,6 @@ class DeepLightningTrainer(Trainer):
                     f"Attribute '{attribute}' has not been set.")
             
         return cfg, logger
-
 
     def init_callbacks(self, cfg: DeepLightningConfig, artifact_path: str) -> list[Callback]:
         """ Initialize callback functions."""

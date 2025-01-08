@@ -2,6 +2,7 @@ from typing import Any, List, Union
 from omegaconf import OmegaConf
 from omegaconf.listconfig import ListConfig
 import inspect
+import torch
 from torch import Tensor
 
 from deeplightning import METRIC_REGISTRY
@@ -157,13 +158,19 @@ def initialise_metrics(
     defaults: dict = None,
 ) -> dict:
     
+    device = torch.device("cuda") \
+        if cfg.engine.accelerator in ["auto","gpu"] and torch.cuda.is_available() \
+        else  torch.device("cpu")
+    
     metrics_dict = {}
     for phase in ["train", "val", "test"]:
         metrics_dict[phase] = {}
         metrics_list = metrics_defaults(cfg, phase, defaults)
         for metric_name in metrics_list:
+            #print(metric_name, type(METRIC_REGISTRY.get_element_instance(name=metric_name, cfg=cfg)))
+            #raise
             metrics_dict[phase][metric_name] = METRIC_REGISTRY.get_element_instance(
-                name=metric_name, cfg=cfg)
+                name=metric_name, cfg=cfg).to(device)
     return metrics_dict
     
 

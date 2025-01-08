@@ -14,8 +14,8 @@ class DeepLightningPipeline():
         self.model = self._init_model(cfg)
         self.trainer = self._init_trainer(cfg)
 
-        self._cfg = self.trainer._passback_cfg  # retrieve augmented config
-
+        self._cfg = cfg #self.trainer._passback_cfg  # retrieve augmented config
+        self._cfg.logger.runtime.artifact_path = "wandb/tmp"
 
     @property
     def cfg(self):

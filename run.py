@@ -1,7 +1,8 @@
 import argparse
+import os 
 
-import hydra
-from omegaconf import DictConfig
+#import hydra
+from omegaconf import DictConfig, OmegaConf
 import wandb
 
 from deeplightning.core.dlconfig import reload_config
@@ -24,12 +25,14 @@ parser.add_argument(
 args = parser.parse_args()
 
 
-@hydra.main(
-    version_base = None,
-    config_path = args.config_path, 
-    config_name = args.config_name,
-)
-def _main(config: DictConfig) -> None:
+#@hydra.main(
+#    version_base = None,
+#    config_path = args.config_path, 
+#    config_name = args.config_name,
+#)
+def _main() -> None:
+    
+    config = OmegaConf.load(os.path.join(args.config_path, args.config_name))
     
     # The following config is incomplete. When initializing the trainer within
     # the Pipeline, the config will be updated with runtime info (e.g. run id,

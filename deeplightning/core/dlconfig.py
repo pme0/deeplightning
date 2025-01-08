@@ -73,8 +73,8 @@ class TrainConfig:
     grad_accum_from_epoch: int
     grad_accum_every_n_batches: int
     ckpt_resume_path: str | None
-    ckpt_monitor_metric: str  # used in `ModelCheckpoint` callback
-    ckpt_monitor_mode: str  # used in `ModelCheckpoint` callback
+    ckpt_monitor_metric: str | None  # used in `ModelCheckpoint` callback
+    ckpt_monitor_mode: str | None  # used in `ModelCheckpoint` callback
     ckpt_every_n_epochs: int
     ckpt_save_top_k: int
     early_stop_metric: str | None

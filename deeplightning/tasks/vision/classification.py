@@ -72,12 +72,14 @@ class ImageClassificationTask(BaseTask):
         self.update_losses(phase="train", losses={"train_loss": train_loss})
 
         # Update metrics
+        """
         self.metrics.update(
             phase = "train", 
             **{
                 "preds": outputs, 
                 "target": batch["targets"],
             })
+        """
     
         if self.global_step % self.cfg.logger.log_every_n_steps == 0:
             
@@ -87,11 +89,13 @@ class ImageClassificationTask(BaseTask):
             self.gather_losses(phase="train")
             
             # Compute metrics (batch only)
+            """
             self.metrics.compute(
                 phase = "train",
                 metric_tracker = self.metric_tracker,
                 reset = True,
                 **{})
+            """
 
             self.on_logging_end(phase="train")
 
@@ -117,12 +121,14 @@ class ImageClassificationTask(BaseTask):
         self.update_losses(phase="val", losses={"val_loss": val_loss})
 
         # Update metrics
+        """
         self.metrics.update(
             phase = "val",
             **{
                 "preds": outputs, 
                 "target": batch["targets"],
             })
+        """
 
 
     def on_validation_epoch_end(self):
@@ -133,6 +139,7 @@ class ImageClassificationTask(BaseTask):
         self.gather_losses(phase="val")
 
         # Compute metrics
+        """
         self.metrics.compute(
             phase = "val",
             metric_tracker = self.metric_tracker,
@@ -141,6 +148,7 @@ class ImageClassificationTask(BaseTask):
                 "epoch": self.current_epoch,
                 "max_epochs": self.trainer.max_epochs,
             })
+        """
         
         if self.trainer.state.stage != RunningStage.SANITY_CHECKING:
             self.on_logging_end(phase="val")
@@ -161,12 +169,14 @@ class ImageClassificationTask(BaseTask):
         self.update_losses(phase="test", losses={"test_loss": test_loss})
 
         # Update metrics
+        """
         self.metrics.update(
             phase = "test",
             **{
                 "preds": outputs, 
                 "target": batch["targets"],
             })
+        """
 
 
     def on_test_epoch_end(self):
@@ -177,6 +187,7 @@ class ImageClassificationTask(BaseTask):
         self.gather_losses(phase="test")
 
         # Compute metrics
+        """
         self.metrics.compute(
             phase = "test",
             metric_tracker = self.metric_tracker,
@@ -185,6 +196,7 @@ class ImageClassificationTask(BaseTask):
                 "epoch": self.current_epoch-1,  # `current_epoch` seems to be incremented after the last validation loop so it's 1 more than it should be during the testing loop
                 "max_epochs": self.trainer.max_epochs,
             })
+        """
 
         self.on_logging_end(phase="test")
 

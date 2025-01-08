@@ -6,7 +6,7 @@ stages:
     grad_accum_from_epoch: 0
     grad_accum_every_n_batches: 1
     ckpt_resume_path: null
-    ckpt_monitor_metric: val_classification_accuracy  # used in `ModelCheckpoint` callback
+    ckpt_monitor_metric: null #val_classification_accuracy  # used in `ModelCheckpoint` callback
     ckpt_monitor_mode: max  # used in `ModelCheckpoint` callback
     ckpt_every_n_epochs: 1
     ckpt_save_top_k: 1
@@ -63,9 +63,9 @@ task:
     test: ["classification_accuracy", "confusion_matrix", "precision_recall_curve"]
 
 engine:
-  accelerator: cpu
-  strategy: auto
-  devices: auto
+  accelerator: gpu
+  strategy: ddp
+  devices: 2
   num_nodes: 1
   precision: 32
   seed: 101
